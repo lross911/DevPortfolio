@@ -4,15 +4,15 @@ class PortfoliosController < ApplicationController
   end
 
   def new
-    @portfolio_items = Portfolio.new
+    @portfolio_item = Portfolio.new
   end
 
   def create
-    @portfolio_items = Portfolio.new(params.require(:portfolio).permit(:title, :subtitle, :body))
+    @portfolio_item = Portfolio.new(params.require(:portfolio).permit(:title, :subtitle, :body))
 
     respond_to do |format|
-      if @portfolio_items.save
-        format.html { redirect_to portfolios_path, notice: 'Your Portfolio item is now live.' }
+      if @portfolio_item.save
+        format.html { redirect_to portfolios_path, notice: 'Your portfolio item is now live.' }
       else
         format.html { render :new }
       end
@@ -35,10 +35,21 @@ class PortfoliosController < ApplicationController
     end
   end
 
-def show
-      @portfolio_item = Portfolio.find(params[:id])
+  def show
+    @portfolio_item = Portfolio.find(params[:id])
+  end
+
+  def destroy
+    # Perform the lookup
+    @portfolio_item = Portfolio.find(params[:id])
+
+    # Destroy/delete the record
+    @portfolio_item.destroy
+
+    # Redirect
+    respond_to do |format|
+      format.html { redirect_to portfolios_url, notice: 'Record was removed.' }
+    end
   end
 
 end
-
-
